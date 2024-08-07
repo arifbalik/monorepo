@@ -27,10 +27,10 @@ jobs:
               pull_number: pr.number
             });
 
-            const filteredFiles = changedFiles.filter(file => {
+            const filteredFiles = changedFiles.data.filter(file => {
               return !exludeExtensions.includes(file.filename.split('.').pop());
             });
-            
+
             const totalAdditions = changedFiles.data.reduce((acc, file) => {
               if (!filteredFiles.includes(file.filename)) 
                 return acc + file.additions;
