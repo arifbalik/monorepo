@@ -34,8 +34,6 @@ jobs:
               if (filesAfterGlob.includes(file.filename)) 
                 return acc + file.additions;
               return 0;
-              }
-              return acc + file.additions;
             }, 0);
 
 
