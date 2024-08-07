@@ -21,10 +21,14 @@ jobs:
             const pr = context.payload.pull_request;
             const patterns = ['**/*.json', '**/*.md', '**/*.txt'];
 
-            const patternMatchers = patterns.map(pattern => new RegExp(globSync(pattern).join('|')));
+            const changedFiles = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
 
             const filteredFiles = changedFiles.data.filter(file => {
-              return patternMatchers.some(matcher => matcher.test(file.filename));
+              return patterns.some(pattern => new RegExp(pattern).test(file.filename))
             }).map(file => file.filename);
 
             const totalAdditions = changedFiles.data.reduce((acc, file) => {
@@ -32,6 +36,7 @@ jobs:
                 return acc + file.additions;
               return 0;
             }, 0);
+
             core.notice(`Total additions: ${totalAdditions}`);
 
             if (totalAdditions > MAX_PR_SIZE) {
