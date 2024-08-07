@@ -35,10 +35,9 @@ jobs:
                 DEFAULT_MERGE_COMMIT_TITLE: 'PR_TITLE'
                 DEFAULT_MERGE_COMMIT_MESSAGE: 'PR_BODY'
                 DEFAULT_ARCHIVED: false
-                DEFAULT_ALLOW_FORKING: true
                 DEFAULT_WEB_COMMIT_SIGNOFF_REQUIRED: true
         with:
-          github-token: ${{ secrets.FULL_ACCESS_PAT }}
+          github-token: ${{ secrets.REPO_SETTINGS_PAT }}
           script: |
             github.rest.repos.update({
               owner: context.repo.owner,
@@ -75,7 +74,6 @@ jobs:
                 merge_commit_title: process.env.DEFAULT_MERGE_COMMIT_TITLE,
                 merge_commit_message: process.env.DEFAULT_MERGE_COMMIT_MESSAGE,
                 archived: process.env.DEFAULT_ARCHIVED,
-                allow_forking: process.env.DEFAULT_ALLOW_FORKING,
                 web_commit_signoff_required: process.env.DEFAULT_WEB_COMMIT_SIGNOFF_REQUIRED
             });
         
