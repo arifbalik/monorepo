@@ -21,7 +21,7 @@ jobs:
             const pr = context.payload.pull_request;
             const patterns = ['**/*.json', '**/*.md', '**/*.txt'];
 
-            const patternMatchers = patterns.map(pattern => new RegExp(glob.sync(pattern).join('|')));
+            const patternMatchers = patterns.map(pattern => new RegExp(globSync(pattern).join('|')));
 
             const filteredFiles = changedFiles.data.filter(file => {
               return patternMatchers.some(matcher => matcher.test(file.filename));
