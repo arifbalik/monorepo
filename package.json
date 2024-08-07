@@ -7,6 +7,7 @@
     "husky": "^9.1.4"
   },
   "scripts": {
+    "reset-repo": "sh scripts/reset-repo-settings.sh",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
     "zephyr-dev": "devcontainer up --workspace-folder . --config .devcontainer/zephyr/devcontainer.json",

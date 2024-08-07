@@ -13,11 +13,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
+        env:
+          MAX_PR_SIZE: 500
         with:
           script: |
             const MAX_PR_SIZE = parseInt(process.env.MAX_PR_SIZE);
             const pr = context.payload.pull_request;
-            if (pr.additions > MAX_PR_SIZE) {
+            const exludeExtensions = ['.yaml', '.yml', '.json', '.md', '.txt'];
+
+            const changedFiles = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+
+            const excludedFiles = changedFiles.data.filter(file => {
+              return exludeExtensions.some(ext => file.filename.endsWith(ext));
+            });
+
+            const totalAdditions = changedFiles.data.reduce((acc, file) => {
+              if (!excludedFiles.includes(file)) {
+                return acc + file.additions;
+              }
+              return acc;
+            }, 0);
+
+            core.notice(`Total additions: ${totalAdditions}`);
+
+            if (totalAdditions > MAX_PR_SIZE) {
               github.rest.issues.createComment({
               issue_number: pr.number,
               owner: context.repo.owner,
@@ -26,5 +49,3 @@ jobs:
               });
               core.setFailed(`PR size is too large. Please keep PR size under ${MAX_PR_SIZE} additions.`);
             } else { core.notice(`PR size is within limits.`); }
-        env:
-          MAX_PR_SIZE: 500
