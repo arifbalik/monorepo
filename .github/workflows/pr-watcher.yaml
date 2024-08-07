@@ -27,12 +27,12 @@ jobs:
               pull_number: pr.number
             });
 
-            const globber = await glob.create(patterns.join('\n'), {followSymbolicLinks: false});
-            const filesAfterGlob = await globber.glob()
-            core.notice(`Files after glob: ${filesAfterGlob}`);
+            const filteredFiles = changedFiles.data.filter(file => {
+              return patterns.some(pattern => minimatch(file.filename, pattern));
+            }).map(file => file.filename);
 
             const totalAdditions = changedFiles.data.reduce((acc, file) => {
-              if (filesAfterGlob.includes(file.filename)) 
+              if (!filteredFiles.includes(file.filename)) 
                 return acc + file.additions;
               return 0;
             }, 0);
