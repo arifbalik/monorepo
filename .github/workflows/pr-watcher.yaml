@@ -18,8 +18,6 @@ jobs:
           GLOB: "['**/*.md', '**/*.yaml', '**/*.yml', '**/*.json']"
         with:
           script: |
-            const glob = require("glob");
-
             const MAX_PR_SIZE = parseInt(process.env.MAX_PR_SIZE);
             const pr = context.payload.pull_request;
 
