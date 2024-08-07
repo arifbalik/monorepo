@@ -37,6 +37,7 @@ jobs:
               return 0;
             }, 0);
 
+            core.notice(`Total additions: ${totalAdditions}`);
 
             if (totalAdditions > MAX_PR_SIZE) {
               github.rest.issues.createComment({
