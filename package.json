@@ -10,6 +10,7 @@
     "prepare": "husky",
     "commitlint": "commitlint --edit",
     "zephyr-dev": "devcontainer up --workspace-folder . --config .devcontainer/zephyr/devcontainer.json",
-    "zephyr-dev-run": "devcontainer exec --workspace-folder . --config .devcontainer/zephyr/devcontainer.json"
+    "zephyr-dev-run": "devcontainer exec --workspace-folder . --config .devcontainer/zephyr/devcontainer.json",
+    "lint": "npx mega-linter-runner --fix"
   }
 }
