@@ -12,9 +12,10 @@ jobs:
         with:
           script: |
             const MAX_PR_SIZE = parseInt(process.env.MAX_PR_SIZE);
-            if (context.payload.pull_request.additions > MAX_PR_SIZE) {
+            const pr = context.payload.pull_request;
+            if (pr.additions > MAX_PR_SIZE) {
               github.rest.issues.createComment({
-              issue_number: context.pull_request.number,
+              issue_number: pr.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `:x: PR size is too large. Please keep PR size under ${MAX_PR_SIZE} additions.`
