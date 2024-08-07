@@ -19,7 +19,7 @@ jobs:
           script: |
             const MAX_PR_SIZE = parseInt(process.env.MAX_PR_SIZE);
             const pr = context.payload.pull_request;
-            const patterns = ['**/*.json', '**/*.md', '**/*.txt'];
+            const exludeExtensions = ['.json', '.md', '.txt'];
 
             const changedFiles = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
@@ -27,10 +27,10 @@ jobs:
               pull_number: pr.number
             });
 
-            const filteredFiles = changedFiles.data.filter(file => {
-              return patterns.some(pattern => new RegExp(pattern).test(file.filename))
-            }).map(file => file.filename);
-
+            const filteredFiles = changedFiles.filter(file => {
+              return !exludeExtensions.includes(file.filename.split('.').pop());
+            });
+            
             const totalAdditions = changedFiles.data.reduce((acc, file) => {
               if (!filteredFiles.includes(file.filename)) 
                 return acc + file.additions;
