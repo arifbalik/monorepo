@@ -27,7 +27,7 @@ jobs:
               pull_number: pr.number
             });
 
-            const globber = await glob.create(process.env.GLOB, { followSymbolicLinks: false });
+            const globber = await glob.create(JSON.parse(process.env.GLOB).join('\n'), { followSymbolicLinks: false });
             const filesAfterGlob = await globber.glob()
             core.notice(`Files after glob: ${filesAfterGlob}`);
 
