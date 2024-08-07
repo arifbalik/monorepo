@@ -19,7 +19,7 @@ jobs:
           script: |
             const MAX_PR_SIZE = parseInt(process.env.MAX_PR_SIZE);
             const pr = context.payload.pull_request;
-            const exludeExtensions = ['.json', '.md', '.txt'];
+            const exludeExtensions = ['.yaml', '.md', '.txt'];
 
             const changedFiles = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
