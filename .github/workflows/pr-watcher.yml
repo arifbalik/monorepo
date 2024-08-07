@@ -11,6 +11,7 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
+            const MAX_PR_SIZE = parseInt(process.env.MAX_PR_SIZE);
             if (context.payload.pull_request.additions > MAX_PR_SIZE) {
               github.rest.issues.createComment({
               issue_number: context.pull_request.number,
@@ -20,3 +21,5 @@ jobs:
               });
               core.setFailed(`PR size is too large. Please keep PR size under ${MAX_PR_SIZE} additions.`);
             } else { core.notice(`PR size is within limits.`); }
+        env:
+          MAX_PR_SIZE: 200
