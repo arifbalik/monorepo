@@ -28,7 +28,7 @@ jobs:
             });
 
             const filteredFiles = changedFiles.data.filter(file => {
-              return !exludeExtensions.includes(file.filename.split('.').pop());
+              return !exludeExtensions.some(ext => file.filename.endsWith(ext));
             });
 
             const totalAdditions = changedFiles.data.reduce((acc, file) => {
