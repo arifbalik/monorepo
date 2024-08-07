@@ -27,14 +27,15 @@ jobs:
               pull_number: pr.number
             });
 
-            const filteredFiles = changedFiles.data.filter(file => {
-              return !exludeExtensions.some(ext => file.filename.endsWith(ext));
+            const excludedFiles = changedFiles.data.filter(file => {
+              return exludeExtensions.some(ext => file.filename.endsWith(ext));
             });
 
             const totalAdditions = changedFiles.data.reduce((acc, file) => {
-              if (!filteredFiles.includes(file.filename)) 
+              if (!excludedFiles.includes(file)) {
                 return acc + file.additions;
-              return 0;
+              }
+              return acc;
             }, 0);
 
             core.notice(`Total additions: ${totalAdditions}`);
