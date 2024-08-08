@@ -16,7 +16,7 @@ gh api \
   -F "has_issues=true" \
   -F "has_projects=true" \
   -F "has_wiki=true" \
-  -F "is_template=false" \
+  -F "is_template=true" \
   -f "default_branch=main" \
   -F "allow_squash_merge=true" \
   -F "allow_merge_commit=false" \
@@ -36,7 +36,7 @@ rulesets=$(gh api 'repos/{owner}/{repo}/rulesets')
 ruleset_id=$(echo "$rulesets" | jq -r ".[] | select(.name == \"$ruleset_name\") | .id")
 # shellcheck disable=SC2089
 rules='{
-"name": "'$ruleset_name'",
+  "name": "'$ruleset_name'",
   "target": "branch",
   "enforcement": "active",
   "conditions": {
@@ -66,18 +66,34 @@ rules='{
         "require_last_push_approval": true,
         "required_review_thread_resolution": true
       }
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": false,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "check-pr-size"
+          },
+          {
+            "context": "MegaLinter"
+          },
+          {
+            "context": "commitlint"
+          }
+        ]
+      }
     }
   ],
   "bypass_actors": [
     {
-      "actor_id": 5,
-      "actor_type": "RepositoryRole",
+      "actor_id": 1,
+      "actor_type": "OrganizationAdmin",
       "bypass_mode": "always"
     }
-  ],
-  "current_user_can_bypass": "always"
-}
-'
+  ]
+}'
 
 if [ -n "$ruleset_id" ]; then
   gh api \

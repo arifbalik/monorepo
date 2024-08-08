@@ -10,7 +10,8 @@
     "reset-repo": "sh scripts/reset-repo-settings.sh",
     "commitlint": "commitlint --edit",
     "lint": "npx mega-linter-runner --fix",
-    "zephyr-dev": "devcontainer up --workspace-folder . --config .devcontainer/zephyr/devcontainer.json",
-    "zephyr-dev-run": "devcontainer exec --workspace-folder . --config .devcontainer/zephyr/devcontainer.json"
+    "dev-build": "docker volume create monorepo && devcontainer build --workspace-folder . --config .devcontainer/generic/devcontainer.json",
+    "dev": "devcontainer up --workspace-folder . --config .devcontainer/generic/devcontainer.json",
+    "dev-shell": "devcontainer exec --workspace-folder . --config .devcontainer/generic/devcontainer.json"
   }
 }
