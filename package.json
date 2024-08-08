@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@devcontainers/cli": "^0.67.0",
+    "husky": "^9.1.4"
+  },
+  "scripts": {
+    "reset-repo": "sh scripts/reset-repo-settings.sh",
+    "commitlint": "commitlint --edit",
+    "lint": "npx mega-linter-runner --fix",
+    "dev-build": "docker volume create monorepo && devcontainer build --workspace-folder . --config .devcontainer/generic/devcontainer.json",
+    "dev": "devcontainer up --workspace-folder . --config .devcontainer/generic/devcontainer.json",
+    "dev-shell": "devcontainer exec --workspace-folder . --config .devcontainer/generic/devcontainer.json"
+  }
+}

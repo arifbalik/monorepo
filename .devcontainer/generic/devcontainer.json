@@ -1,0 +1,28 @@
+{
+    "name": "Generic",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "options": [
+            "-t",
+            "monorepo/generic-devcontainer:latest"
+        ]
+    },
+    "runArgs": [
+        "--name",
+        "generic-devcontainer"
+    ],
+    "workspaceMount": "source=monorepo,target=/workspace,type=volume",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.profiles.linux": {
+                    "zsh": {
+                        "path": "/bin/zsh"
+                    }
+                }
+            }
+        }
+    }
+}
