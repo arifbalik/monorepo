@@ -5,3 +5,7 @@ node_modules/
 # mega-linter
 
 megalinter-reports/
+
+# signing keys
+
+*signing*

@@ -9,10 +9,11 @@
     },
     "runArgs": [
         "--name",
-        "generic-devcontainer"
+        "generic-devcontainer",
+        "--privileged"
     ],
-    "workspaceMount": "source=monorepo,target=/workspace,type=volume",
-    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=monorepo,target=/home/monouser/workspace,type=volume",
+    "workspaceFolder": "/home/monouser/workspace",
     "customizations": {
         "vscode": {
             "settings": {

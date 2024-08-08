@@ -6,7 +6,7 @@ gh api \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   'repos/{owner}/{repo}' \
   -f "name=monorepo" \
-  -f "description=A test on personal monorepos" \
+  -f "description=Personal monorepo playground" \
   -f "homepage=" \
   -F "private=false" \
   -f "visibility=public" \
