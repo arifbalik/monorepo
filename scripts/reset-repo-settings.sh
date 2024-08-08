@@ -88,8 +88,8 @@ rules='{
   ],
   "bypass_actors": [
     {
-      "actor_id": 1,
-      "actor_type": "OrganizationAdmin",
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
       "bypass_mode": "always"
     }
   ]
