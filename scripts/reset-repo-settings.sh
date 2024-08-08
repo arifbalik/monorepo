@@ -1,16 +1,18 @@
+#!/bin/sh
+
 gh api \
   --method PATCH \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  repos/{owner}/{repo} \
+  'repos/{owner}/{repo}' \
   -f "name=monorepo" \
   -f "description=A test on personal monorepos" \
   -f "homepage=" \
   -F "private=false" \
   -f "visibility=public" \
-  -f security_and_analysis[secret_scanning][status]=enabled \
-  -f security_and_analysis[secret_scanning_push_protection][status]=enabled \
-  -f security_and_analysis[secret_scanning_non_provider_patterns][status]=enabled \
+  -f "security_and_analysis[secret_scanning][status]"=enabled \
+  -f "security_and_analysis[secret_scanning_push_protection][status]"=enabled \
+  -f "security_and_analysis[secret_scanning_non_provider_patterns][status]"=enabled \
   -F "has_issues=true" \
   -F "has_projects=true" \
   -F "has_wiki=true" \
@@ -30,10 +32,11 @@ gh api \
   -F "web_commit_signoff_required=true"
 
 ruleset_name="default ruleset"
-rulesets=$(gh api repos/{owner}/{repo}/rulesets)
-ruleset_id=$(echo $rulesets | jq -r ".[] | select(.name == \"$ruleset_name\") | .id")
+rulesets=$(gh api 'repos/{owner}/{repo}/rulesets')
+ruleset_id=$(echo "$rulesets" | jq -r ".[] | select(.name == \"$ruleset_name\") | .id")
+# shellcheck disable=SC2089
 rules='{
- "name": "'$ruleset_name'",
+"name": "'$ruleset_name'",
   "target": "branch",
   "enforcement": "active",
   "conditions": {
@@ -81,11 +84,11 @@ if [ -n "$ruleset_id" ]; then
   --method DELETE \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  repos/{owner}/{repo}/rulesets/$ruleset_id
+  'repos/{owner}/{repo}/rulesets/'"$ruleset_id"
 fi
 
-echo $rules | gh api \
+echo "$rules" | gh api \
   --method POST \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  repos/{owner}/{repo}/rulesets --input -
+  'repos/{owner}/{repo}/rulesets' --input -
