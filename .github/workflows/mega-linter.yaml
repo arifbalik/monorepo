@@ -38,7 +38,7 @@
     jobs:
       megalinter:
         name: MegaLinter
-        runs-on: ubuntu-latest
+        runs-on: self-hosted
     
         # Give the default GITHUB_TOKEN write permission to commit and push, comment
         # issues & post new PR; remove the ones you do not need
