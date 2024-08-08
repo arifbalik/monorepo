@@ -8,10 +8,9 @@
   },
   "scripts": {
     "reset-repo": "sh scripts/reset-repo-settings.sh",
-    "prepare": "husky",
     "commitlint": "commitlint --edit",
+    "lint": "npx mega-linter-runner --fix",
     "zephyr-dev": "devcontainer up --workspace-folder . --config .devcontainer/zephyr/devcontainer.json",
-    "zephyr-dev-run": "devcontainer exec --workspace-folder . --config .devcontainer/zephyr/devcontainer.json",
-    "lint": "npx mega-linter-runner --fix"
+    "zephyr-dev-run": "devcontainer exec --workspace-folder . --config .devcontainer/zephyr/devcontainer.json"
   }
 }

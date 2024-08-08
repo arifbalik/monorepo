@@ -1,57 +1,91 @@
-gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" repos/{owner}/{repo} -f data='{
-    "name": "monorepo",
-    "description": "A test on personal monorepos",
-    "homepage": "",
-    "private": false,
-    "visibility": "public",
-    "security_and_analysis": {
-      "advanced_security": { "status": "enabled" },
-      "secret_scanning": { "status": "enabled" },
-      "secret_scanning_push_protection": { "status": "enabled" },
-      "secret_scanning_non_provider_patterns": { "status": "enabled" }
-    },
-    "has_issues": true,
-    "has_projects": true,
-    "has_wiki": true,
-    "is_template": true,
-    "default_branch": "main",
-    "allow_squash_merge": true,
-    "allow_merge_commit": false,
-    "allow_rebase_merge": false,
-    "allow_auto_merge": false,
-    "delete_branch_on_merge": true,
-    "allow_update_branch": true,
-    "squash_merge_commit_title": "COMMIT_OR_PR_TITLE",
-    "squash_merge_commit_message": "COMMIT_MESSAGES",
-    "merge_commit_title": "PR_TITLE",
-    "merge_commit_message": "PR_BODY",
-    "archived": false,
-    "web_commit_signoff_required": true
-  }'
+gh api \
+  --method PATCH \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  repos/{owner}/{repo} \
+  -f "name=monorepo" \
+  -f "description=A test on personal monorepos" \
+  -f "homepage=" \
+  -F "private=false" \
+  -f "visibility=public" \
+  -f security_and_analysis[secret_scanning][status]=enabled \
+  -f security_and_analysis[secret_scanning_push_protection][status]=enabled \
+  -f security_and_analysis[secret_scanning_non_provider_patterns][status]=enabled \
+  -F "has_issues=true" \
+  -F "has_projects=true" \
+  -F "has_wiki=true" \
+  -F "is_template=false" \
+  -f "default_branch=main" \
+  -F "allow_squash_merge=true" \
+  -F "allow_merge_commit=false" \
+  -F "allow_rebase_merge=false" \
+  -F "allow_auto_merge=false" \
+  -F "delete_branch_on_merge=true" \
+  -F "allow_update_branch=true" \
+  -f "squash_merge_commit_title=COMMIT_OR_PR_TITLE" \
+  -f "squash_merge_commit_message=COMMIT_MESSAGES" \
+  -f "merge_commit_title=PR_TITLE" \
+  -f "merge_commit_message=PR_BODY" \
+  -F "archived=false" \
+  -F "web_commit_signoff_required=true"
 
 ruleset_name="default ruleset"
 rulesets=$(gh api repos/{owner}/{repo}/rulesets)
 ruleset_id=$(echo $rulesets | jq -r ".[] | select(.name == \"$ruleset_name\") | .id")
-rules_path="scripts/repo-rules.json"
+rules='{
+ "name": "'$ruleset_name'",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": [
+        "~DEFAULT_BRANCH"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "required_signatures"
+    },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews_on_push": true,
+        "require_code_owner_review": false,
+        "require_last_push_approval": true,
+        "required_review_thread_resolution": true
+      }
+    }
+  ],
+  "bypass_actors": [
+    {
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
+      "bypass_mode": "always"
+    }
+  ],
+  "current_user_can_bypass": "always"
+}
+'
 
-echo "Ruleset ID: $ruleset_id"
-
-if [ -z "$ruleset_id" ]; then
-  echo "Ruleset not found with the name $ruleset_name, creating a new ruleset"
-  # add field name to rules.json
-  jq ". + {\"name\": \"$ruleset_name\"}" $rules_path > tmp.json && mv tmp.json $rules_path
+if [ -n "$ruleset_id" ]; then
   gh api \
+  --method DELETE \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  repos/{owner}/{repo}/rulesets/$ruleset_id
+fi
+
+echo $rules | gh api \
   --method POST \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  repos/{owner}/{repo}/rulesets \
-  --input $rules_path
-else 
- echo "Ruleset found with the name $ruleset_name, updating the ruleset"
-  gh api \
-  --method PUT \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  repos/{owner}/{repo}/rulesets/$ruleset_id \
-  --input $rules_path
-fi
+  repos/{owner}/{repo}/rulesets --input -
