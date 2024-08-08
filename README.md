@@ -38,3 +38,6 @@ gh api \
   /repos/arifbalik/monorepo/generate \
    -f "owner=your-username" -f "name=my-monorepo" -f "description=A test with monorepos"
 ```
+
+> [!NOTE]
+> Self hosted runners are not enabled by default. Please see open pull requests to see how to enable them.
