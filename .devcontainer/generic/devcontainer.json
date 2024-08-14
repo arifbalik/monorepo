@@ -24,6 +24,20 @@
                     }
                 }
             }
-        }
+        },
+        "extensions": [
+            "ms-vscode-remote.remote-containers",
+            "ms-azuretools.vscode-docker",
+            "waderyan.gitblame",
+            "github.vscode-github-actions",
+            "GitHub.copilot",
+            "GitHub.vscode-pull-request-github",
+            "exiasr.hadolint",
+            "yzhang.markdown-all-in-one",
+            "DavidAnson.vscode-markdownlint",
+            "PKief.material-icon-theme",
+            "timonwong.shellcheck",
+            "redhat.vscode-yaml"
+        ]
     }
 }

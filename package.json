@@ -8,10 +8,10 @@
   },
   "scripts": {
     "reset-repo": "sh scripts/reset-repo-settings.sh",
+    "update-from-template": "git fetch --all && git merge --allow-unrelated-histories template/main",
     "signingkey": "git config --global commit.gpgsign true && git config --global gpg.format ssh && git config --global user.signingkey",
     "commitlint": "commitlint --edit",
     "lint": "npx mega-linter-runner --fix",
-    "create-volume": "docker volume create monorepo",
     "dev": "devcontainer up --workspace-folder . --config .devcontainer/generic/devcontainer.json",
     "dev-shell": "devcontainer exec --workspace-folder . --config .devcontainer/generic/devcontainer.json"
   }

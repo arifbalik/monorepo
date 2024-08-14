@@ -19,6 +19,7 @@ RUN apt-get update && \
     gh=2.45.0-1ubuntu0.1 \
     jq=1.7.1-3build1 \
     openssh-client=1:9.6p1-3ubuntu13.4 \
+    cron=3.0pl1-184ubuntu2 \
     nodejs npm && \
     rm -rf /var/lib/apt/lists/*
 
