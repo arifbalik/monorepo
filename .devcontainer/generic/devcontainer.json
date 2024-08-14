@@ -1,0 +1,43 @@
+{
+    "name": "Generic",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "options": [
+            "-t",
+            "monorepo/generic-devcontainer:latest"
+        ]
+    },
+    "runArgs": [
+        "--name",
+        "generic-devcontainer",
+        "--privileged"
+    ],
+    "workspaceMount": "source=monorepo,target=/home/monouser/workspace,type=volume",
+    "workspaceFolder": "/home/monouser/workspace",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.profiles.linux": {
+                    "zsh": {
+                        "path": "/bin/zsh"
+                    }
+                }
+            }
+        },
+        "extensions": [
+            "ms-vscode-remote.remote-containers",
+            "ms-azuretools.vscode-docker",
+            "waderyan.gitblame",
+            "github.vscode-github-actions",
+            "GitHub.copilot",
+            "GitHub.vscode-pull-request-github",
+            "exiasr.hadolint",
+            "yzhang.markdown-all-in-one",
+            "DavidAnson.vscode-markdownlint",
+            "PKief.material-icon-theme",
+            "timonwong.shellcheck",
+            "redhat.vscode-yaml"
+        ]
+    }
+}
